@@ -1,21 +1,29 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, ValidationError } from '@nestjs/common';
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+
 
 @Catch(HttpException)
 export class HttpFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  async catch(
+    exception:  HttpException,
+    host: ArgumentsHost,
+  ): Promise<void> {
     const ctx = host.switchToHttp();
     const response: Response = ctx.getResponse();
     const request: Request = ctx.getRequest();
-    const next: NextFunction = ctx.getNext();
     const status = exception.getStatus();
-
+    
+    if(status==400){
+      response.status(status).json(exception.getResponse());
+      return
+    }
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
-      path: request.url, 
+      path: request.url,
+      message: exception.message
     });
-    next();
+    
   }
 }
