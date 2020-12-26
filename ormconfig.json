@@ -5,8 +5,7 @@
   "username": "root",
   "password": "",
   "database": "NEST_TESTDB",
-  "entities": [
-    "dist/**/*.entity{.ts,.js}"
-  ],
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "dropSchema": true,
   "synchronize": true
 }
