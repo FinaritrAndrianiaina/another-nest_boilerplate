@@ -4,9 +4,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpFilter } from './filters/http.filter';
 import { UsersModule } from './users/users.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 
 @Module({
-  imports: [UsersModule],
+  imports: [
+    UsersModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    })
+  ],
   controllers: [AppController],
   providers: [
     AppService,
@@ -16,4 +23,5 @@ import { UsersModule } from './users/users.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
