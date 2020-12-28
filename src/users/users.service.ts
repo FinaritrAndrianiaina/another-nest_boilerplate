@@ -32,7 +32,7 @@ export class UsersService {
       return user;
     } catch (error) {
       if (error instanceof EntityNotFoundError){
-        throw new UnauthorizedException({message:"Les informations fournies sont erronées"})
+        loginDto.unauhtorized()
       }
       throw error
     }

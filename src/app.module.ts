@@ -7,11 +7,12 @@ import { AppService } from './app.service';
 import { HttpFilter } from './filters/http.filter';
 import { UsersModule } from './users/users.module';
 import { EntitynotfoundFilter } from './filters/entitynotfound.filter';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forRoot()],
+  imports: [UsersModule, TypeOrmModule.forRoot(), AuthModule],
   controllers: [AppController],
-  providers: [ 
+  providers: [
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
