@@ -10,22 +10,22 @@ import { EntitynotfoundFilter } from './filters/entitynotfound.filter';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forRoot(), AuthModule],
-  controllers: [AppController],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: EntitynotfoundFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: HttpFilter,
-    },
-    AppService,
-  ],
+	imports: [UsersModule, TypeOrmModule.forRoot(), AuthModule],
+	controllers: [AppController],
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: AllExceptionsFilter,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: EntitynotfoundFilter,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: HttpFilter,
+		},
+		AppService,
+	],
 })
 export class AppModule {}

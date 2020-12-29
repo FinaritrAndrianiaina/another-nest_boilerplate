@@ -1,55 +1,71 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login-user.dto';
+import { LoginDto } from '../auth/dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
+import { DuplicatefieldException } from 'src/filters/exceptions/duplicatefield.exception';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepos: Repository<User>,
-  ) {}
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const new_user = this.userRepos.create(createUserDto);
-    return this.userRepos.save(new_user);
-  }
+	constructor(
+		@InjectRepository(User)
+		private readonly userRepos: Repository<User>,
+	) {}
 
-  async findAll() {
-    return await this.userRepos.find();
-  }
+	duplicateError(message: string) {
+		throw new DuplicatefieldException({message})
+	}
 
-  findOne(id: string) {
-    return this.userRepos.findOneOrFail({ where: { id } });
-  }
+	async checkIfDoesntExists(dto: Partial<User>){
+		const username_ = await this.userRepos.findOne({ where: { username: dto.username } });
+		const email_ = await this.userRepos.findOne({ where: { email: dto.email } });
+		
+		Boolean(username_) && this.duplicateError(`Le nom d'utilisateur ${dto.username} est déjà utilisé`); 
+		Boolean(email_) && this.duplicateError(`L'email ${dto.email} est déjà utilisée`);
+		return true; 
+	}
 
-  async login(loginDto:LoginDto) {
-    try {
-      const user = await this.userRepos.findOneOrFail({where:loginDto})
-      return user;
-    } catch (error) {
-      if (error instanceof EntityNotFoundError){
-        loginDto.unauhtorized()
-      }
-      throw error
-    }
-  }
+	async create(createUserDto: CreateUserDto): Promise<User> {
+		await this.checkIfDoesntExists(createUserDto);
+		const new_user = this.userRepos.create(createUserDto);
+		return this.userRepos.save(new_user);
+	} 
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-    const updated_user = await this.userRepos.update(user, updateUserDto);
-    return {
-      generatedMaps: updated_user.generatedMaps,
-      ...user,
-      ...updateUserDto,
-      ...updated_user.raw,
-    };
-  }
+	async findAll() {
+		return await this.userRepos.find();
+	}
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
-  }
+	findOne(id: string) {
+		return this.userRepos.findOneOrFail({ where: { id } });
+	}
+
+	unauhtorized() {
+		throw new UnauthorizedException({
+			message: 'Les informations fournies sont erronées',
+		});
+	}
+
+	async login(loginDto: LoginDto) {
+		loginDto.checkDto();
+		try {
+			return await this.userRepos.findOneOrFail({ where: loginDto });
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				this.unauhtorized();
+			}
+			throw error;
+		}
+	}
+
+	async update(id: string, updateUserDto: UpdateUserDto) {
+		const user = await this.findOne(id);
+		return this.userRepos.save({ ...user, ...updateUserDto });
+	}
+
+	remove(id: string) {
+		return `This action removes a #${id} user`;
+	}
 }

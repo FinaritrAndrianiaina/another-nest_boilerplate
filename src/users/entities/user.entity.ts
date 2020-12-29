@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn,ValueTransformer } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,Unique,ValueTransformer } from 'typeorm';
 import * as crypto from "crypto";
 
 class PasswordTransofrm implements ValueTransformer {
@@ -16,10 +16,10 @@ class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({unique:true})
   username: string;
 
-  @Column()
+  @Column({unique:true})
   email: string;
 
   @Column({transformer: new PasswordTransofrm()})
