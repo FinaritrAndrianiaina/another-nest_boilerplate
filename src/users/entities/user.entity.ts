@@ -11,7 +11,7 @@ class PasswordTransofrm implements ValueTransformer {
   }
 }
 
-@Entity("Users")
+@Entity("users")
 class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
