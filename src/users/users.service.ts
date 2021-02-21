@@ -65,7 +65,8 @@ export class UsersService {
 		return this.userRepos.save({ ...user, ...updateUserDto });
 	}
 
-	remove(id: string) {
-		return `This action removes a #${id} user`;
+	async remove(id: string) {
+		const user = await this.findOne(id);
+		return await this.userRepos.remove(user)
 	}
 }
