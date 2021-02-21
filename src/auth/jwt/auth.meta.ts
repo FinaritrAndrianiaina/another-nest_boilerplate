@@ -1,0 +1,2 @@
+export const ALLOW_ANONYMOUS = "ALLOW_ANONYMOUS"
+export const ONLY_OWNER = "ONLY_OWNER"

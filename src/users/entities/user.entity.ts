@@ -24,7 +24,11 @@ class User {
 
   @Column({transformer: new PasswordTransofrm()})
   @Exclude()
-  password: string
+  password: string;
+
+  @Column({type:"boolean",default:false})
+  isAdmin: boolean;
+  
 
 }
 
