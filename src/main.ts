@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const options = new DocumentBuilder()
-    .setTitle('Nest Boilerplate')
+    .setTitle('Crowdfunding nestjs API')
     .setVersion('2.0')
     .addBearerAuth()
     .build();
