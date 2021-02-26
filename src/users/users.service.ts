@@ -42,6 +42,10 @@ export class UsersService {
 		return this.userRepos.findOneOrFail({ where: { id } });
 	}
 
+	loadPosts(id:string){
+		return this.userRepos.findOneOrFail({where:{id},loadEagerRelations:true})
+	}
+
 	unauhtorized() {
 		throw new UnauthorizedException({
 			message: 'Les informations fournies sont erronées',

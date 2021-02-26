@@ -4,7 +4,7 @@
   "port": 3306,
   "username": "root",
   "password": "",
-  "database": "NEST_TESTDB",
+  "database": "NEST_CROWDFUNDING",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
 }

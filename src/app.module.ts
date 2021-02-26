@@ -8,9 +8,10 @@ import { HttpFilter } from './filters/http.filter';
 import { UsersModule } from './users/users.module';
 import { EntitynotfoundFilter } from './filters/entitynotfound.filter';
 import { AuthModule } from './auth/auth.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
-	imports: [UsersModule, TypeOrmModule.forRoot(), AuthModule],
+	imports: [UsersModule, TypeOrmModule.forRoot(), AuthModule, PostsModule],
 	controllers: [AppController],
 	providers: [
 		{
