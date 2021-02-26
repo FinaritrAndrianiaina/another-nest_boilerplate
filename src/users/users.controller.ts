@@ -12,10 +12,17 @@ import { ADMIN } from './entities/user.role';
 
 @Controller('users')
 @ApiTags('Users')
-@UseGuards(RolesGuard)
 @UseGuards(JwtGuard)
+@UseGuards(RolesGuard)
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
+
+	
+	@Get('whoami')
+	@ApiBearerAuth()
+	whoami(@Req() req) {
+		return req.user;
+	}
 
 	@Post('create')
 	@ApiBearerAuth()
@@ -44,11 +51,6 @@ export class UsersController {
 		return this.usersService.update(id, updateUserDto);
 	}
 
-	@Get('whoami')
-	@ApiBearerAuth()
-	whoami(@Req() req) {
-		return req.user;
-	}
 	
 	@Delete(':id')
 	@ApiBearerAuth()
