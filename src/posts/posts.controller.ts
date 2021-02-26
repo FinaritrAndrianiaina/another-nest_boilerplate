@@ -13,7 +13,7 @@ import { OwnerOrAdmin, RolesGuard } from 'src/users/role.guard';
 export class PostsController {
 	constructor(private readonly postsService: PostsService) {}
 
-  @Post()
+  @Post("create")
   @ApiBearerAuth()
 	create(@Body() createPostDto: CreatePostDto, @Req() req) {
 		return this.postsService.create(createPostDto,req.user);
