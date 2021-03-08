@@ -39,7 +39,7 @@ export class UsersService {
 	}
 
 	findOne(id: string) {
-		return this.userRepos.findOneOrFail({ where: { id } ,relations:["posts"]});
+		return this.userRepos.findOneOrFail({ where: { id } ,loadRelationIds:true});
 	}
 
 	
