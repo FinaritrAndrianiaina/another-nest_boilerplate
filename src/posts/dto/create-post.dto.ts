@@ -1,9 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsDecimal, IsNumber } from "class-validator";
 
 export class CreatePostDto {
+	@ApiProperty()
+	title: string;
+	@ApiProperty()
+	description: string;
 
     @ApiProperty()
-    title: string;
-    @ApiProperty()
-    description:string;
+    @IsNumber()
+    goal: number;
+    
 }

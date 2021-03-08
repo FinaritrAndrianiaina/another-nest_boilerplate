@@ -16,13 +16,11 @@ export class Post {
     @ManyToOne(type=>User,user=>user.posts)
 	author: User
 	
-	@Column({type:"boolean"})
-	isDon: boolean
 
 	@Column({type:"double precision"})
 	goal: number
 
-	@Column({type:"double precision"})
+	@Column({type:"double precision",default:0})
 	actual: number
 
 	@CreateDateColumn()
