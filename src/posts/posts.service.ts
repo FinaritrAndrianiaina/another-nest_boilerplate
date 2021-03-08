@@ -10,14 +10,14 @@ import { Post } from './entities/post.entity';
 export class PostsService {
 	constructor(@InjectRepository(Post) private readonly postRepositoy: Repository<Post>) {}
 
-	create(createPostDto: CreatePostDto,author:User) {
-    const newPost = this.postRepositoy.create(createPostDto);
-    newPost.author = author;
+	create(createPostDto: CreatePostDto, author: User) {
+		const newPost = this.postRepositoy.create(createPostDto);
+		newPost.author = author;
 		return this.postRepositoy.save(newPost);
 	}
 
 	findAll() {
-		return this.postRepositoy.find({relations:["author"]});
+		return this.postRepositoy.find({ relations: ['author'] });
 	}
 
 	findOne(id: string) {
@@ -25,13 +25,13 @@ export class PostsService {
 	}
 
 	async update(id: string, updatePostDto: UpdatePostDto) {
-    const oldPost = await this.findOne(id)
-    Object.assign(oldPost,updatePostDto)
-    return this.postRepositoy.save(oldPost);
+		const oldPost = await this.findOne(id);
+		Object.assign(oldPost, updatePostDto);
+		return this.postRepositoy.save(oldPost);
 	}
 
 	async remove(id: string) {
-    const oldPost = await this.findOne(id);
+		const oldPost = await this.findOne(id);
 		return this.postRepositoy.remove(oldPost);
 	}
 }

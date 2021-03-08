@@ -13,10 +13,10 @@ import { OwnerOrAdmin, RolesGuard } from 'src/users/role.guard';
 export class PostsController {
 	constructor(private readonly postsService: PostsService) {}
 
-  @Post("create")
-  @ApiBearerAuth()
+	@Post('create')
+	@ApiBearerAuth()
 	create(@Body() createPostDto: CreatePostDto, @Req() req) {
-		return this.postsService.create(createPostDto,req.user);
+		return this.postsService.create(createPostDto, req.user);
 	}
 
 	@Get()
@@ -26,18 +26,21 @@ export class PostsController {
 	}
 
 	@Get(':id')
+	@ApiBearerAuth()
 	findOne(@Param('id') id: string) {
 		return this.postsService.findOne(id);
 	}
 
-  @Put(':id')
-  @OwnerOrAdmin()
+	@Put(':id')
+	@ApiBearerAuth()
+	@OwnerOrAdmin()
 	update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
 		return this.postsService.update(id, updatePostDto);
 	}
 
-  @Delete(':id')
-  @ApiBearerAuth()
+	@Delete(':id')
+	@ApiBearerAuth()
+	@OwnerOrAdmin()
 	remove(@Param('id') id: string) {
 		return this.postsService.remove(id);
 	}
