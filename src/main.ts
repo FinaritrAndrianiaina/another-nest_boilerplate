@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Crowdfunding nestjs API')
-    .setVersion('2.0')
+    .setVersion('1.0')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
