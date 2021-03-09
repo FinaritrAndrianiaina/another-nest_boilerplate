@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import User from './entities/user.entity';
 import { JwtGuard,AllowAnonymous } from 'src/auth/jwt/jwt.guard';
-import {  OwnerOrAdmin, Roles, RolesGuard } from './role.guard';
+import {  UserPropetyOrAdmin, Roles, RolesGuard } from './role.guard';
 import { ADMIN } from './entities/user.role';
 
 
@@ -45,14 +45,14 @@ export class UsersController {
 
 	@Put(':id')
 	@ApiBearerAuth()
-	@OwnerOrAdmin()
+	@UserPropetyOrAdmin()
 	update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
 		return this.usersService.update(id, updateUserDto);
 	}
 
 	@Delete(':id')
 	@ApiBearerAuth()
-	@OwnerOrAdmin()
+	@UserPropetyOrAdmin()
 	remove(@Param('id', ParseUUIDPipe) id: string) {
 		return this.usersService.remove(id);
 	}

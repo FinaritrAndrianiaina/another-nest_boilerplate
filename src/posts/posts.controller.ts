@@ -4,7 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AllowAnonymous, JwtGuard } from 'src/auth/jwt/jwt.guard';
-import { OwnerOrAdmin, RolesGuard } from 'src/users/role.guard';
+import { RolesGuard } from 'src/users/role.guard';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -33,15 +33,13 @@ export class PostsController {
 
 	@Put(':id')
 	@ApiBearerAuth()
-	@OwnerOrAdmin()
-	update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-		return this.postsService.update(id, updatePostDto);
+	update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto,@Req() res) {
+		return this.postsService.update(id, updatePostDto,res.user);
 	}
 
 	@Delete(':id')
 	@ApiBearerAuth()
-	@OwnerOrAdmin()
-	remove(@Param('id') id: string) {
-		return this.postsService.remove(id);
+	remove(@Param('id') id: string,@Req() res) {
+		return this.postsService.remove(id,res);
 	}
 }

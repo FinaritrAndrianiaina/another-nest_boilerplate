@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -17,21 +17,28 @@ export class PostsService {
 	}
 
 	findAll() {
-		return this.postRepositoy.find({ relations: ['author'] });
+		return this.postRepositoy.find({ loadRelationIds: true });
+	}
+
+	checkIfOwnerOrAdmin(post: Post, user: User): boolean {
+		if (post.author.id === user.id || user.isAdmin) return true;
+		throw new UnauthorizedException('You must be admin or owner to modify this post');
 	}
 
 	findOne(id: string) {
-		return this.postRepositoy.findOneOrFail({ where: { id } });
+		return this.postRepositoy.findOneOrFail({ where: { id }, relations: ['author'] });
 	}
 
-	async update(id: string, updatePostDto: UpdatePostDto) {
+	async update(id: string, updatePostDto: UpdatePostDto, user: User) {
 		const oldPost = await this.findOne(id);
+		this.checkIfOwnerOrAdmin(oldPost, user);
 		Object.assign(oldPost, updatePostDto);
 		return this.postRepositoy.save(oldPost);
 	}
 
-	async remove(id: string) {
+	async remove(id: string, user: User) {
 		const oldPost = await this.findOne(id);
+		this.checkIfOwnerOrAdmin(oldPost, user);
 		return this.postRepositoy.remove(oldPost);
 	}
 }

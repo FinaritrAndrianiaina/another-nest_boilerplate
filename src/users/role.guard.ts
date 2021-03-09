@@ -30,4 +30,4 @@ export class RolesGuard implements CanActivate {
 
 export const Roles = (...roles) => SetMetadata('roles', roles);
 
-export const OwnerOrAdmin = () => SetMetadata(OWNER,true);
+export const UserPropetyOrAdmin = () => SetMetadata(OWNER,true);
