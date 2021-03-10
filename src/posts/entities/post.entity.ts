@@ -1,5 +1,6 @@
+import { File } from 'src/files/entities/file.entity';
 import User from 'src/users/entities/user.entity';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -16,6 +17,8 @@ export class Post {
     @ManyToOne(type=>User,user=>user.posts)
 	author: User
 	
+	@OneToMany(type=>File,files=>files.associatedPost)
+	documents: File[]
 
 	@Column({type:"double precision"})
 	goal: number

@@ -6,6 +6,7 @@ import { File } from './entities/file.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 } from 'uuid';
+import { PostsModule } from 'src/posts/posts.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { v4 } from 'uuid';
 				},
 			}),
 		}),
+		PostsModule
 	],
 	controllers: [FilesController],
 	providers: [FilesService],

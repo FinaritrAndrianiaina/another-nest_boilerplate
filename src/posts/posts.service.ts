@@ -16,6 +16,10 @@ export class PostsService {
 		return this.postRepositoy.save(newPost);
 	}
 
+	getMyPost(user:User){
+		return this.postRepositoy.find({where:{author:user},relations:["documents"]})
+	}
+
 	findAll() {
 		return this.postRepositoy.find({ loadRelationIds: true });
 	}

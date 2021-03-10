@@ -4,12 +4,10 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AllowAnonymous, JwtGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from 'src/users/role.guard';
 
 @Controller('posts')
 @ApiTags('Posts')
 @UseGuards(JwtGuard)
-@UseGuards(RolesGuard)
 export class PostsController {
 	constructor(private readonly postsService: PostsService) {}
 
@@ -25,21 +23,27 @@ export class PostsController {
 		return this.postsService.findAll();
 	}
 
-	@Get(':id')
+	@Get('/myPost')
 	@ApiBearerAuth()
+	getMyPost(@Req() req) {
+		return this.postsService.getMyPost(req.user);
+	}
+
+	@Get(':id')
+	@AllowAnonymous()
 	findOne(@Param('id') id: string) {
 		return this.postsService.findOne(id);
 	}
 
 	@Put(':id')
 	@ApiBearerAuth()
-	update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto,@Req() res) {
-		return this.postsService.update(id, updatePostDto,res.user);
+	update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto, @Req() res) {
+		return this.postsService.update(id, updatePostDto, res.user);
 	}
 
 	@Delete(':id')
 	@ApiBearerAuth()
-	remove(@Param('id') id: string,@Req() res) {
-		return this.postsService.remove(id,res);
+	remove(@Param('id') id: string, @Req() res) {
+		return this.postsService.remove(id, res);
 	}
 }
