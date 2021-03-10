@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn,Unique,ValueTransformer } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn,Unique,ValueTransformer } from 'typeorm';
 import * as crypto from "crypto";
+import { Post } from 'src/posts/entities/post.entity';
+import { File } from 'src/files/entities/file.entity';
 
 class PasswordTransofrm implements ValueTransformer {
   from(value: string) {
@@ -29,7 +31,11 @@ class User {
   @Column({type:"boolean",default:false})
   isAdmin: boolean;
   
+  @OneToMany(type=>Post,posts=>posts.author)
+  posts: Post[]
 
+  @OneToMany(type=>File,files=>files.uploadedby)
+  files: File[]
 }
 
 export default User;

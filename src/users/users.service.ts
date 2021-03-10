@@ -39,7 +39,12 @@ export class UsersService {
 	}
 
 	findOne(id: string) {
-		return this.userRepos.findOneOrFail({ where: { id } });
+		return this.userRepos.findOneOrFail({ where: { id } ,loadRelationIds:true});
+	}
+
+	
+	loadPosts(id:string){
+		return this.userRepos.findOneOrFail({where:{id},loadEagerRelations:true})
 	}
 
 	unauhtorized() {
